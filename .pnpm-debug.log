@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_INVALID_OVERRIDE_SELECTOR",
+    "err": {
+      "name": "pnpm",
+      "message": "Cannot parse the \"//\" selector in the overrides",
+      "code": "ERR_PNPM_INVALID_OVERRIDE_SELECTOR",
+      "stack": "pnpm: Cannot parse the \"//\" selector in the overrides\n    at parsePkgSelector (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:118754:15)\n    at C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:118746:22\n    at Array.map (<anonymous>)\n    at parseOverrides (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:118732:40)\n    at default_1 (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:118778:152)\n    at createReadPackageHook (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:119806:58)\n    at mutateModules (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:119563:32)\n    at async install (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:119539:24)\n    at async handler (C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:121893:31)\n    at async C:\\Users\\jm\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:182068:21"
+    }
+  }
+}
