@@ -12,6 +12,7 @@ export function jsonToSheetXlsx<T = any>({
   filename = DEF_FILE_NAME,
   json2sheetOpts = {},
   write2excelOpts = { bookType: 'xlsx' },
+  merges = [],
 }: JsonToSheet<T>) {
   const arrData = [...data];
   if (header) {
@@ -20,7 +21,7 @@ export function jsonToSheetXlsx<T = any>({
   }
 
   const worksheet = utils.json_to_sheet(arrData, json2sheetOpts);
-
+  worksheet['!merges'] = merges;
   /* add worksheet to workbook */
   const workbook: WorkBook = {
     SheetNames: [filename],
@@ -28,6 +29,7 @@ export function jsonToSheetXlsx<T = any>({
       [filename]: worksheet,
     },
   };
+
   /* output format determined by filename */
   writeFile(workbook, filename, write2excelOpts);
   /* at this point, out.xlsb will have been downloaded */

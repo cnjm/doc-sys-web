@@ -5,6 +5,8 @@
         <ImpExcel @success="loadDataSuccess" dateFormat="YYYY-MM-DD">
           <a-button class="m-3"> 导入Excel </a-button>
         </ImpExcel>
+        <a-button @click="openModal"> 导出 </a-button>
+        <a-button class="m-3" @click="openModal"> 清除 </a-button>
       </template>
 
       <template #img="{ text }">
@@ -45,6 +47,7 @@
       </template>
     </BasicTable>
     <OperateOrderModal @register="registerModal" @success="handleSuccess" />
+    <ExpExcelModal @register="registerModal" @success="defaultHeader" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -52,14 +55,21 @@
   import { RoleEnum } from '/@/enums/roleEnum';
   import { useRouter } from 'vue-router';
   import { BasicTable, useTable, TableImg, TableAction } from '/@/components/Table';
-  import { getOrderList, importOrder, receivedGoods } from '/@/api/operate/order';
-  import { ImpExcel, ExcelData } from '/@/components/Excel';
+  import { getOrderList, getOrderListAll, importOrder, receivedGoods } from '/@/api/operate/order';
+  import {
+    ImpExcel,
+    ExcelData,
+    ExportModalResult,
+    jsonToSheetXlsx,
+    ExpExcelModal,
+  } from '/@/components/Excel';
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   import OperateOrderModal from './OperateOrderModal.vue';
 
   import { columns, searchFormSchema } from './order.data';
   import { PageEnum } from '/@/enums/pageEnum';
+  import { data as datae } from '../../demo/excel/data';
 
   export default defineComponent({
     name: 'OperateOrderManagement',
@@ -67,6 +77,7 @@
       BasicTable,
       PageWrapper,
       OperateOrderModal,
+      ExpExcelModal,
       TableImg,
       TableAction,
       ImpExcel,
@@ -174,6 +185,63 @@
         await importOrder({ orders: columns });
       }
 
+      async function defaultHeader({ filename, bookType }: ExportModalResult) {
+        const results = await getOrderListAll({});
+
+        console.log(datae);
+        const obj = {};
+        for (const value of results.items) {
+          if (value.productId in obj) {
+            calc(value);
+          } else {
+            obj[value.productId] = [];
+            calc(value);
+          }
+        }
+        function calc(value) {
+          if (value.orderNum <= 0) {
+            console.log('订单数量出错了');
+            return;
+          }
+          const amount = Math.floor(value.amount / value.orderNum);
+
+          const index = obj[value.productId].findIndex((item) => item.amount === amount);
+          if (index > -1) {
+            obj[value.productId][index].orderNum += value.orderNum;
+          } else {
+            obj[value.productId].push({
+              shopName: value.shopName,
+              productName: value.productName,
+              productId: value.productId,
+              amount,
+              orderNum: value.orderNum,
+            });
+          }
+        }
+
+        let data: any[] = [];
+        for (const key in obj) {
+          data = [...data, ...obj[key]];
+        }
+        console.log(data);
+        // 默认Object.keys(data[0])作为header
+        jsonToSheetXlsx({
+          data,
+          header: {
+            shopName: '店铺名称',
+            productId: '商品ID',
+            productName: '商品全名',
+            orderNum: '下单件数',
+            amount: '实付金额',
+          },
+          filename,
+          merges: [],
+          write2excelOpts: {
+            bookType,
+          },
+        });
+      }
+
       return {
         registerTable,
         searchInfo,
@@ -184,6 +252,8 @@
         handleSuccess,
         OPERATE,
         loadDataSuccess,
+        defaultHeader,
+        openModal,
       };
     },
   });

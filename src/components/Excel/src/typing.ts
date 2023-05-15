@@ -12,6 +12,7 @@ export interface JsonToSheet<T = any> {
   filename?: string;
   json2sheetOpts?: JSON2SheetOpts;
   write2excelOpts?: WritingOptions;
+  merges?: any[];
 }
 
 export interface AoAToSheet<T = any> {

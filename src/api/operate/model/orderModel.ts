@@ -50,3 +50,14 @@ export interface receivedGoodsParams {
 }
 
 export type OrderListGetResultModel = BasicFetchResult<OrderListItem>;
+
+export type OrderListAllGetResultModel = BasicFetchResult<{
+  id: string;
+  merchantId: string;
+  shopName: string;
+  orderNo: string;
+  productId: string;
+  productName: string;
+  amount: number;
+  orderNum: number;
+}>;
