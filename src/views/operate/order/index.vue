@@ -138,42 +138,44 @@
         for (const excelData of excelDataList) {
           const { results } = excelData;
           for (const item of results) {
-            columns.push({
-              shopName: item['店铺名称'],
-              merchantId: item['商户号'],
-              shopCode: item['店铺编码'],
-              orderNo: item['订单号'],
-              orderSource: item['订单来源'],
-              adChannel: item['广告渠道'],
-              adAccountId: item['广告账户ID'],
-              adId: item['广告ID'],
-              orderStatus: item['订单状态'],
-              orderAt: item['订单创建时间'],
-              paymentAt: item['买家付款时间'],
-              deliveryAt: item['发货时间'],
-              completionAt: item['交易成功/关闭时间'],
-              paymentMethod: item['付款方式'],
-              paymentNo: item['支付流水号'],
-              totalPrice: item['商品总价'],
-              freight: item['运费'],
-              totalDiscount: item['优惠总额'],
-              amount: item['实付金额'],
-              productId: item['商品ID'],
-              productName: item['商品全名'],
-              productDes: item['商品备注'],
-              specsCode: item['规格编码/套餐编码'],
-              productSpecs: item['商品规格'],
-              orderNum: item['下单件数'],
-              expressName: item['快递公司'],
-              expressNo: item['快递单号'],
-              salesStatus: item['售后状态'],
-              salesType: item['售后类型'],
-              address: item['收件人地址'],
-              recipientName: item['收件人'],
-              recipientPhone: item['收件人手机号'],
-              message: item['买家留言'],
-              notes: item['商家备注'],
-            });
+            if (['待发货', '已发货', '已完成'].includes(item['订单状态'])) {
+              columns.push({
+                shopName: item['店铺名称'],
+                merchantId: item['商户号'],
+                shopCode: item['店铺编码'],
+                orderNo: item['订单号'],
+                // orderSource: item['订单来源'],
+                // adChannel: item['广告渠道'],
+                // adAccountId: item['广告账户ID'],
+                // adId: item['广告ID'],
+                orderStatus: item['订单状态'],
+                // orderAt: item['订单创建时间'],
+                // paymentAt: item['买家付款时间'],
+                // deliveryAt: item['发货时间'],
+                // completionAt: item['交易成功/关闭时间'],
+                // paymentMethod: item['付款方式'],
+                // paymentNo: item['支付流水号'],
+                totalPrice: item['商品总价'],
+                freight: item['运费'],
+                totalDiscount: item['优惠总额'],
+                amount: item['实付金额'],
+                productId: item['商品ID'],
+                productName: item['商品全名'],
+                // productDes: item['商品备注'],
+                // specsCode: item['规格编码/套餐编码'],
+                // productSpecs: item['商品规格'],
+                orderNum: item['下单件数'],
+                // expressName: item['快递公司'],
+                // expressNo: item['快递单号'],
+                // salesStatus: item['售后状态'],
+                // salesType: item['售后类型'],
+                // address: item['收件人地址'],
+                // recipientName: item['收件人'],
+                // recipientPhone: item['收件人手机号'],
+                // message: item['买家留言'],
+                // notes: item['商家备注'],
+              });
+            }
           }
 
           // console.log(results);
@@ -203,8 +205,7 @@
             console.log('订单数量出错了');
             return;
           }
-          const amount = Math.floor(value.amount / value.orderNum);
-
+          const amount = parseFloat((value.amount / value.orderNum).toFixed(2));
           const index = obj[value.productId].findIndex((item) => item.amount === amount);
           if (index > -1) {
             obj[value.productId][index].orderNum += value.orderNum;
