@@ -37,9 +37,7 @@ export interface OrderListItem {
   notes: string;
 }
 export type OrderParams = BasicPageParams & {
-  id?: string;
-  status?: string;
-  phone?: string;
+  orderNo?: string;
 };
 export interface deliverGoodsParams {
   id: number;

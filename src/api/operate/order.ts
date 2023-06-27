@@ -14,6 +14,7 @@ enum Api {
   ORDER_DELIVER = '/admin/order/deliverGoods',
   ORDER_RECEIVED = '/admin/order/receivedGoods',
   IMPORT_ORDER = '/admin/order/importOrder',
+  DEL = '/admin/order/delOrderListAll',
 }
 
 export const getOrderList = (params: OrderParams, mode: ErrorMessageMode = 'message') =>
@@ -33,3 +34,6 @@ export const receivedGoods = (params: receivedGoodsParams, mode: ErrorMessageMod
 
 export const importOrder = (params: any, mode: ErrorMessageMode = 'message') =>
   defHttp.post<string>({ url: Api.IMPORT_ORDER, params }, { errorMessageMode: mode });
+
+export const delOrderListAll = (params: any, mode: ErrorMessageMode = 'message') =>
+  defHttp.post<string>({ url: Api.DEL, params }, { errorMessageMode: mode });

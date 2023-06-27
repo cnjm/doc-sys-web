@@ -5,8 +5,8 @@
         <ImpExcel @success="loadDataSuccess" dateFormat="YYYY-MM-DD">
           <a-button class="m-3"> 导入Excel </a-button>
         </ImpExcel>
-        <a-button @click="openModal"> 导出 </a-button>
-        <a-button class="m-3" @click="openModal"> 清除 </a-button>
+        <a-button @click="openModal"> 导出统计数据 </a-button>
+        <a-button class="m-3" @click="delAds"> 清除 </a-button>
       </template>
 
       <template #img="{ text }">
@@ -55,7 +55,14 @@
   import { RoleEnum } from '/@/enums/roleEnum';
   import { useRouter } from 'vue-router';
   import { BasicTable, useTable, TableImg, TableAction } from '/@/components/Table';
-  import { getOrderList, getOrderListAll, importOrder, receivedGoods } from '/@/api/operate/order';
+  import {
+    getOrderList,
+    getOrderListAll,
+    importOrder,
+    receivedGoods,
+    delOrderListAll,
+  } from '/@/api/operate/order';
+  import { getAdListAll } from '/@/api/operate/ad';
   import {
     ImpExcel,
     ExcelData,
@@ -69,7 +76,9 @@
 
   import { columns, searchFormSchema } from './order.data';
   import { PageEnum } from '/@/enums/pageEnum';
-  import { data as datae } from '../../demo/excel/data';
+  // import { data as datae } from '../../demo/excel/data';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { AdListAllItem } from '/@/api/operate/model/adModel';
 
   export default defineComponent({
     name: 'OperateOrderManagement',
@@ -85,6 +94,7 @@
     setup() {
       const OPERATE = RoleEnum.OPERATE;
       const [registerModal, { openModal }] = useModal();
+      const { createConfirm } = useMessage();
       const searchInfo = reactive<Recordable>({});
       const { push } = useRouter();
       const [registerTable, { reload }] = useTable({
@@ -105,12 +115,12 @@
           console.log('handleSearchInfoFn', info);
           return info;
         },
-        actionColumn: {
-          width: 120,
-          title: '操作',
-          dataIndex: 'action',
-          slots: { customRender: 'action' },
-        },
+        // actionColumn: {
+        //   width: 120,
+        //   title: '操作',
+        //   dataIndex: 'action',
+        //   slots: { customRender: 'action' },
+        // },
       });
 
       function handleDeliver(record: Recordable) {
@@ -127,6 +137,18 @@
       async function handleEye(record: Recordable) {
         const data = { ...record };
         push({ path: PageEnum.ORDER_DESC, query: { id: data.id } });
+      }
+
+      async function delAds() {
+        createConfirm({
+          iconType: 'warning',
+          title: '温馨提示',
+          content: '确认删除吗？',
+          onOk: async () => {
+            await delOrderListAll({});
+            reload();
+          },
+        });
       }
 
       function handleSuccess() {
@@ -185,22 +207,45 @@
         }
         console.log(columns);
         await importOrder({ orders: columns });
+        reload();
       }
 
       async function defaultHeader({ filename, bookType }: ExportModalResult) {
         const results = await getOrderListAll({});
+        const ids = await getAdListAll({});
+        const productIds = Object.keys(ids);
 
-        console.log(datae);
+        const orderIdList = results.items.map((item) => item.productId);
+
         const obj = {};
         for (const value of results.items) {
-          if (value.productId in obj) {
-            calc(value);
-          } else {
-            obj[value.productId] = [];
-            calc(value);
+          if (productIds.includes(value.productId)) {
+            if (value.productId in obj) {
+              calc(value, ids[value.productId]);
+            } else {
+              obj[value.productId] = [];
+              calc(value, ids[value.productId]);
+            }
           }
         }
-        function calc(value) {
+        for (const id in ids) {
+          if (!orderIdList.includes(id) && ids[id].spend > 0) {
+            obj[id] = [];
+            obj[id].push({
+              shopName: '无',
+              productName: '无',
+              productId: id,
+              amount: 0,
+              orderNum: 0,
+              adName: ids[id].adName,
+              adId: ids[id].adId,
+              operateName: ids[id].operateName,
+              spend: ids[id].spend,
+            });
+          }
+        }
+
+        function calc(value, adItem: AdListAllItem) {
           if (value.orderNum <= 0) {
             console.log('订单数量出错了');
             return;
@@ -216,6 +261,10 @@
               productId: value.productId,
               amount,
               orderNum: value.orderNum,
+              adName: adItem.adName,
+              adId: adItem.adId,
+              operateName: adItem.operateName,
+              spend: adItem.spend,
             });
           }
         }
@@ -224,7 +273,31 @@
         for (const key in obj) {
           data = [...data, ...obj[key]];
         }
+        data.sort((a, b) => {
+          if (a.operateName === b.operateName) {
+            if (a.productId === b.productId) {
+              if (a.amount > b.amount) {
+                return 1;
+              } else {
+                return -1;
+              }
+            } else {
+              if (a.productId > b.productId) {
+                return 1;
+              } else {
+                return -1;
+              }
+            }
+          } else {
+            if (a.operateName > b.operateName) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+        });
         console.log(data);
+        // return;
         // 默认Object.keys(data[0])作为header
         jsonToSheetXlsx({
           data,
@@ -232,8 +305,12 @@
             shopName: '店铺名称',
             productId: '商品ID',
             productName: '商品全名',
+            adName: '广告主名',
             orderNum: '下单件数',
             amount: '实付金额',
+            adId: '账户ID',
+            operateName: '运营人员',
+            spend: '消耗账户币',
           },
           filename,
           merges: [],
@@ -249,6 +326,7 @@
         registerModal,
         handleReceived,
         handleDeliver,
+        delAds,
         handleEye,
         handleSuccess,
         OPERATE,

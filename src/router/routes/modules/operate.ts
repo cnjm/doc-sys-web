@@ -45,6 +45,16 @@ const operate: AppRouteModule = {
       },
       component: () => import('/@/views/operate/order/index.vue'),
     },
+    {
+      path: 'ad',
+      name: 'OperateAdManagement',
+      meta: {
+        title: '广告流水',
+        ignoreKeepAlive: true,
+        // roles: [RoleEnum.OPERATE, RoleEnum.OPERATE_VIEW],
+      },
+      component: () => import('/@/views/operate/ad/index.vue'),
+    },
     // {
     //   path: 'orderDesc',
     //   name: 'OperateOrderDesc',
