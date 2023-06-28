@@ -296,24 +296,43 @@
             }
           }
         });
-        console.log(data);
+
+        let merges: any[] = [];
+        let productId = data[0].productId;
+        let sr = 1;
+        let num = -1;
+        data.forEach((element) => {
+          if (productId !== element.productId) {
+            let er = num === 0 ? sr : sr + num;
+            merges = [
+              ...merges,
+              ...[0, 1, 2, 4, 6, 7, 8].map((c) => ({ s: { r: sr, c }, e: { r: er, c } })),
+            ];
+            productId = element.productId;
+            sr = er + 1;
+            num = 0;
+          } else {
+            num += 1;
+          }
+        });
+        console.log(merges);
         // return;
         // 默认Object.keys(data[0])作为header
         jsonToSheetXlsx({
           data,
           header: {
-            shopName: '店铺名称',
-            productId: '商品ID',
-            productName: '商品全名',
-            adName: '广告主名',
-            orderNum: '下单件数',
-            amount: '实付金额',
             adId: '账户ID',
-            operateName: '运营人员',
+            adName: '广告主名',
+            productId: '商品ID',
+            orderNum: '下单件数',
             spend: '消耗账户币',
+            amount: '实付金额',
+            operateName: '运营人员',
+            shopName: '店铺名称',
+            productName: '商品全名',
           },
           filename,
-          merges: [],
+          merges,
           write2excelOpts: {
             bookType,
           },
