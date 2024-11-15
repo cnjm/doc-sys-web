@@ -210,129 +210,240 @@
         reload();
       }
 
+      // async function defaultHeader({ filename, bookType }: ExportModalResult) {
+      //   const results = await getOrderListAll({});
+      //   const ids = await getAdListAll({});
+      //   const productIds = Object.keys(ids);
+
+      //   const orderIdList = results.items.map((item) => item.productId);
+
+      //   const date = '8.24';
+
+      //   const obj = {};
+      //   for (const value of results.items) {
+      //     if (productIds.includes(value.productId)) {
+      //       if (value.productId in obj) {
+      //         calc(value, ids[value.productId]);
+      //       } else {
+      //         obj[value.productId] = [];
+      //         calc(value, ids[value.productId]);
+      //       }
+      //     }
+      //   }
+      //   for (const id in ids) {
+      //     if (!orderIdList.includes(id) && ids[id].spend > 0) {
+      //       obj[id] = [];
+      //       obj[id].push({
+      //         date,
+      //         shopName: '无',
+      //         productName: '无',
+      //         productId: id,
+      //         amount: 0,
+      //         orderNum: 0,
+      //         adName: ids[id].adName,
+      //         adId: ids[id].adId,
+      //         operateName: ids[id].operateName,
+      //         spend: ids[id].spend,
+      //         consume: '',
+      //         accumulateRmb: '',
+      //         accumulateOrder: '',
+      //         // 产品成本
+      //         productCost: 1,
+      //         packageFee: 0,
+      //         houseFee: 0,
+      //         expressFee: 1,
+      //         operateCost: 1,
+      //         returnExpress: 1,
+      //         returnPackageFee: 0,
+      //         signingRate: '85%',
+      //         refusalRate: '',
+      //         signingProfit: '',
+      //         refusalCost: '',
+      //         adCritical: '',
+      //         averageExpressFee: '',
+      //         transformCost: '',
+      //         yesterdayProfit: '',
+      //         accrualProfit: '',
+      //         grossMargin: '',
+      //       });
+      //     }
+      //   }
+
+      //   function calc(value, adItem: AdListAllItem) {
+      //     if (value.orderNum <= 0) {
+      //       console.log('订单数量出错了');
+      //       return;
+      //     }
+      //     const amount = parseFloat((value.amount / value.orderNum).toFixed(2));
+      //     const index = obj[value.productId].findIndex((item) => item.amount === amount);
+      //     if (index > -1) {
+      //       obj[value.productId][index].orderNum += value.orderNum;
+      //     } else {
+      //       obj[value.productId].push({
+      //         date,
+      //         shopName: value.shopName,
+      //         productName: value.productName,
+      //         productId: value.productId,
+      //         amount,
+      //         orderNum: value.orderNum,
+      //         adName: adItem.adName,
+      //         adId: adItem.adId,
+      //         operateName: adItem.operateName,
+      //         spend: adItem.spend,
+      //         consume: '',
+      //         accumulateRmb: '',
+      //         accumulateOrder: '',
+      //         // 产品成本
+      //         productCost: 1,
+      //         packageFee: 0,
+      //         houseFee: 0,
+      //         expressFee: 1,
+      //         operateCost: 1,
+      //         returnExpress: 1,
+      //         returnPackageFee: 0,
+      //         signingRate: '85%',
+      //         refusalRate: '',
+      //         signingProfit: '',
+      //         refusalCost: '',
+      //         adCritical: '',
+      //         averageExpressFee: '',
+      //         transformCost: '',
+      //         yesterdayProfit: '',
+      //         accrualProfit: '',
+      //         grossMargin: '',
+      //       });
+      //     }
+      //   }
+
+      //   let data: any[] = [];
+      //   for (const key in obj) {
+      //     data = [...data, ...obj[key]];
+      //   }
+      //   data.sort((a, b) => {
+      //     if (a.operateName === b.operateName) {
+      //       if (a.productId === b.productId) {
+      //         if (a.amount > b.amount) {
+      //           return 1;
+      //         } else {
+      //           return -1;
+      //         }
+      //       } else {
+      //         if (a.productId > b.productId) {
+      //           return 1;
+      //         } else {
+      //           return -1;
+      //         }
+      //       }
+      //     } else {
+      //       if (a.operateName > b.operateName) {
+      //         return 1;
+      //       } else {
+      //         return -1;
+      //       }
+      //     }
+      //   });
+
+      //   let formulas: any = {};
+      //   let merges: any[] = [];
+      //   let productId = data[0].productId;
+      //   let sr = 1;
+      //   let er = 0;
+      //   data.forEach((element, num) => {
+      //     let fnum = num + 2;
+
+      //     if (productId !== element.productId || num === data.length - 1) {
+      //       er += num === data.length - 1 ? num + 1 : num;
+      //       merges = [
+      //         ...merges,
+      //         ...[0, 1, 2, 3, 5, 6, 7, 8, 25].map((c) => ({ s: { r: sr, c }, e: { r: er, c } })),
+      //       ];
+      //       let fsr = sr + 1;
+      //       let fer = er + 1;
+      //       formulas['G' + fsr] = { t: 'n', f: `F${fsr}/1.03` };
+      //       formulas['H' + fsr] = { t: 'n', f: `SUM(E${fsr}:E${fer})` };
+      //       formulas['I' + fsr] = { t: 'n', f: `G${fsr}` };
+
+      //       formulas['Z' + fsr] = { t: 'n', f: `SUM(Y${fsr}:Y${fer})` };
+
+      //       productId = element.productId;
+      //       if (num !== data.length - 1) {
+      //         sr = er + 1;
+      //       }
+      //       er = 0;
+      //     }
+
+      //     formulas['S' + fnum] = { t: 'n', f: `1-R${fnum}` };
+      //     formulas['T' + fnum] = {
+      //       t: 'n',
+      //       f: `(J${fnum}-K${fnum}-L${fnum}-N${fnum}-O${fnum})-(J${fnum}*0.05)`,
+      //     };
+      //     formulas['U' + fnum] = { t: 'n', f: `N${fnum}+P${fnum}+Q${fnum}` };
+      //     formulas['V' + fnum] = { t: 'n', f: `(T${fnum}*R${fnum})-(U${fnum}*S${fnum})` };
+      //     formulas['W' + fnum] = {
+      //       t: 'n',
+      //       f: `((N${fnum}+L${fnum})*R${fnum})+(J${fnum}*0.01*R${fnum})+((N${fnum}+P${fnum}+Q${fnum})*S${fnum})`,
+      //     };
+      //     formulas['X' + fnum] = { t: 'n', f: `G${sr + 1}/H${sr + 1}` };
+      //     formulas['Y' + fnum] = { t: 'n', f: `E${fnum}*(V${fnum}-X${fnum})-M${fnum}` };
+      //     formulas['AA' + fnum] = { t: 'n', f: `T${fnum}/J${fnum}` };
+      //   });
+      //   // console.log(merges);
+      //   // return;
+      //   // 默认Object.keys(data[0])作为header
+      //   jsonToSheetXlsx({
+      //     data,
+      //     header: {
+      //       date: '日期',
+      //       adId: '账户ID',
+      //       productName: '产品',
+      //       productId: '商品ID',
+      //       orderNum: '总订单',
+      //       spend: '消耗账户币',
+      //       consume: '消耗人民币',
+      //       accumulateOrder: '累积订单',
+      //       accumulateRmb: '累积人民币',
+      //       amount: '产品客单价',
+      //       productCost: '产品成本',
+      //       packageFee: '包材费',
+      //       houseFee: '到仓费用',
+      //       expressFee: '快递费',
+      //       operateCost: '运营成本',
+      //       returnExpress: '退回快递',
+      //       returnPackageFee: '退回包装损耗',
+      //       signingRate: '签收率',
+      //       refusalRate: '拒签率',
+      //       signingProfit: '签收每单利润',
+      //       refusalCost: '拒签每单成本',
+      //       adCritical: '广告临界点',
+      //       averageExpressFee: '平均运费',
+      //       transformCost: '后台转化成本',
+      //       yesterdayProfit: '昨日利润',
+      //       accrualProfit: '累积利润',
+      //       grossMargin: '毛利率',
+      //       operateName: '运营人员',
+      //       adName: '广告主名',
+      //       shopName: '店铺名称',
+      //     },
+      //     filename,
+      //     merges,
+      //     formulas,
+      //     write2excelOpts: {
+      //       bookType,
+      //     },
+      //   });
+      // }
+
       async function defaultHeader({ filename, bookType }: ExportModalResult) {
-        const results = await getOrderListAll({});
-        const ids = await getAdListAll({});
-        const productIds = Object.keys(ids);
-
-        const orderIdList = results.items.map((item) => item.productId);
-
-        const obj = {};
-        for (const value of results.items) {
-          if (productIds.includes(value.productId)) {
-            if (value.productId in obj) {
-              calc(value, ids[value.productId]);
-            } else {
-              obj[value.productId] = [];
-              calc(value, ids[value.productId]);
-            }
-          }
-        }
-        for (const id in ids) {
-          if (!orderIdList.includes(id) && ids[id].spend > 0) {
-            obj[id] = [];
-            obj[id].push({
-              shopName: '无',
-              productName: '无',
-              productId: id,
-              amount: 0,
-              orderNum: 0,
-              adName: ids[id].adName,
-              adId: ids[id].adId,
-              operateName: ids[id].operateName,
-              spend: ids[id].spend,
-            });
-          }
-        }
-
-        function calc(value, adItem: AdListAllItem) {
-          if (value.orderNum <= 0) {
-            console.log('订单数量出错了');
-            return;
-          }
-          const amount = parseFloat((value.amount / value.orderNum).toFixed(2));
-          const index = obj[value.productId].findIndex((item) => item.amount === amount);
-          if (index > -1) {
-            obj[value.productId][index].orderNum += value.orderNum;
-          } else {
-            obj[value.productId].push({
-              shopName: value.shopName,
-              productName: value.productName,
-              productId: value.productId,
-              amount,
-              orderNum: value.orderNum,
-              adName: adItem.adName,
-              adId: adItem.adId,
-              operateName: adItem.operateName,
-              spend: adItem.spend,
-            });
-          }
-        }
-
-        let data: any[] = [];
-        for (const key in obj) {
-          data = [...data, ...obj[key]];
-        }
-        data.sort((a, b) => {
-          if (a.operateName === b.operateName) {
-            if (a.productId === b.productId) {
-              if (a.amount > b.amount) {
-                return 1;
-              } else {
-                return -1;
-              }
-            } else {
-              if (a.productId > b.productId) {
-                return 1;
-              } else {
-                return -1;
-              }
-            }
-          } else {
-            if (a.operateName > b.operateName) {
-              return 1;
-            } else {
-              return -1;
-            }
-          }
-        });
-
-        let merges: any[] = [];
-        let productId = data[0].productId;
-        let sr = 1;
-        let num = -1;
-        data.forEach((element) => {
-          if (productId !== element.productId) {
-            let er = num === 0 ? sr : sr + num;
-            merges = [
-              ...merges,
-              ...[0, 1, 2, 4, 6, 7, 8].map((c) => ({ s: { r: sr, c }, e: { r: er, c } })),
-            ];
-            productId = element.productId;
-            sr = er + 1;
-            num = 0;
-          } else {
-            num += 1;
-          }
-        });
-        console.log(merges);
-        // return;
-        // 默认Object.keys(data[0])作为header
+        const date = new Date().getTime();
+        const data = new Array(100000).fill({ date: date });
         jsonToSheetXlsx({
           data,
           header: {
-            adId: '账户ID',
-            adName: '广告主名',
-            productId: '商品ID',
-            orderNum: '下单件数',
-            spend: '消耗账户币',
-            amount: '实付金额',
-            operateName: '运营人员',
-            shopName: '店铺名称',
-            productName: '商品全名',
+            date: '日期',
           },
           filename,
-          merges,
+          merges: [],
+          formulas: {},
           write2excelOpts: {
             bookType,
           },

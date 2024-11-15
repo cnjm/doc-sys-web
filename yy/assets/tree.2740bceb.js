@@ -1,0 +1,1 @@
+import{aG as i}from"./index.5678fbaf.js";var e;(function(t){t.OPTIONS_LIST="/select/getDemoOptions"})(e||(e={}));const n=t=>i.get({url:e.OPTIONS_LIST,params:t});var o;(function(t){t.TREE_OPTIONS_LIST="/tree/getDemoOptions"})(o||(o={}));const p=t=>i.get({url:o.TREE_OPTIONS_LIST,params:t});export{n as o,p as t};

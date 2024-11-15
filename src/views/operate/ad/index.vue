@@ -91,7 +91,7 @@
 
       async function loadDataSuccess(excelDataList: ExcelData[]) {
         const columns: any[] = [];
-        let reg = /cy|xxx|e|FX/g;
+        let reg = /cy|yt|e/g;
         let matchReg = /\d{18}/g;
 
         for (const excelData of excelDataList) {

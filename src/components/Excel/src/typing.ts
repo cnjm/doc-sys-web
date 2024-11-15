@@ -13,6 +13,7 @@ export interface JsonToSheet<T = any> {
   json2sheetOpts?: JSON2SheetOpts;
   write2excelOpts?: WritingOptions;
   merges?: any[];
+  formulas: any;
 }
 
 export interface AoAToSheet<T = any> {

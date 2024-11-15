@@ -25,16 +25,16 @@ const operate: AppRouteModule = {
     //   },
     //   component: () => import('/@/views/operate/swiper/index.vue'),
     // },
-    // {
-    //   path: 'collect',
-    //   name: 'OperateCollectManagement',
-    //   meta: {
-    //     title: '收藏列表',
-    //     ignoreKeepAlive: true,
-    //     roles: [RoleEnum.OPERATE, RoleEnum.OPERATE_VIEW],
-    //   },
-    //   component: () => import('/@/views/operate/collect/index.vue'),
-    // },
+    {
+      path: 'collect',
+      name: 'OperateCollectManagement',
+      meta: {
+        title: '月度统计',
+        ignoreKeepAlive: true,
+        // roles: [RoleEnum.OPERATE, RoleEnum.OPERATE_VIEW],
+      },
+      component: () => import('/@/views/operate/collect/index.vue'),
+    },
     {
       path: 'order',
       name: 'OperateOrderManagement',

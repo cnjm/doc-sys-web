@@ -50,6 +50,7 @@ export const data: any[] = (() => {
   }
   return arr;
 })();
+console.log(data);
 
 // ["ID", "姓名", "年龄", "编号", "地址", "开始时间", "结束时间"]
 export const arrHeader = columns.map((column) => column.title);

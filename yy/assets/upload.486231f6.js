@@ -1,0 +1,1 @@
+import{u,aG as t}from"./index.5678fbaf.js";var n;(function(o){o.GET_QINIU_TOKEN="/common/upload/getQiniuToken"})(n||(n={}));const{uploadUrl:a=""}=u();function r(o,e){return t.uploadFile({url:a,onUploadProgress:e},o)}const s=(o,e="none")=>t.get({url:n.GET_QINIU_TOKEN,params:o},{errorMessageMode:e});export{s as g,r as u};

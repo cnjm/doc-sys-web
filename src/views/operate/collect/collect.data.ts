@@ -2,50 +2,27 @@ import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 export const columns: BasicColumn[] = [
   {
-    title: '收藏ID',
+    title: 'ID',
     dataIndex: 'id',
-    width: 80,
+    width: 200,
   },
   {
-    title: '用户ID',
-    dataIndex: 'user_id',
-    width: 80,
+    title: '店铺',
+    dataIndex: 'shopName',
+    width: 200,
   },
   {
-    title: '用户昵称',
-    dataIndex: 'user_name',
-    width: 100,
+    title: '发货内容',
+    dataIndex: 'goodName',
+    width: 200,
   },
   {
-    title: '用户头像',
-    dataIndex: 'user_avatar_url',
-    width: 180,
+    title: '发货时间',
+    dataIndex: 'time',
+    width: 200,
     slots: {
       customRender: 'avatar',
     },
-  },
-  {
-    title: '商品ID',
-    dataIndex: 'goods_id',
-    width: 80,
-  },
-  {
-    title: '商品名称',
-    dataIndex: 'goods_name',
-    width: 180,
-  },
-  {
-    title: '缩略图',
-    dataIndex: 'urls',
-    width: 180,
-    slots: {
-      customRender: 'img',
-    },
-  },
-  {
-    title: '收藏时间',
-    dataIndex: 'update_at',
-    width: 180,
   },
 ];
 
